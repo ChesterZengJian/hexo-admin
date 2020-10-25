@@ -395,7 +395,7 @@ module.exports = function (app, hexo) {
       if (err) {
         console.log(err)
       }
-      var imageSrc = path.join(hexo.config.root + filename).replace(/\\/g, '/')
+      var imageSrc = path.join(hexo.config.images_url + filename).replace(/\\/g, '/')
       hexo.source.process().then(function () {
         res.done({
           src: imageSrc,
