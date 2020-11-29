@@ -5,9 +5,8 @@ const httpClient = fetchUtils.fetchJson;
 
 var hexoDataProvider = {
   getList: (resource, params) => {
-    const url = `/${resource}/list`;
-
-    return httpClient(url).then(({ headers, json }) => {
+    return httpClient(`/${resource}/list`).then(({ headers, json }) => {
+      console.log(json[0]);
       json.map(function (obj, index) {
         obj.id = obj._id;
       });
