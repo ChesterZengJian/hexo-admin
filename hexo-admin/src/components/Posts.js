@@ -27,7 +27,7 @@ export const PostEdit = (props) => (
   <Edit {...props}>
     <SimpleForm>
       <TextField source="title" />
-      <TextInput source="content" />
+      <TextInput source="_content" />
     </SimpleForm>
   </Edit>
 );

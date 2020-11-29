@@ -53,11 +53,15 @@ var hexoDataProvider = {
   //   }));
   // },
 
-  // update: (resource, params) =>
-  //   httpClient(`${apiUrl}/${resource}/${params.id}`, {
-  //     method: "PUT",
-  //     body: JSON.stringify(params.data),
-  //   }).then(({ json }) => ({ data: json })),
+  update: (resource, params) => {
+    return httpClient(`/${resource}/${params.id}`, {
+      method: "POST",
+      body: JSON.stringify({ _content: params.data._content }),
+    }).then(({ json }) => {
+      json.post.id = json.post._id;
+      return { data: json.post };
+    });
+  },
 
   // updateMany: (resource, params) => {
   //   const query = {
