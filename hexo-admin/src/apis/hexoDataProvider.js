@@ -6,7 +6,7 @@ const httpClient = fetchUtils.fetchJson;
 var hexoDataProvider = {
   getList: (resource, params) => {
     return httpClient(`/${resource}/list`).then(({ headers, json }) => {
-      console.log(json[0]);
+      console.log(json);
       json.map(function (obj, index) {
         obj.id = obj._id;
       });
@@ -17,10 +17,14 @@ var hexoDataProvider = {
     });
   },
 
-  // getOne: (resource, params) =>
-  //   httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
-  //     data: json,
-  //   })),
+  getOne: (resource, params) =>
+    httpClient(`/${resource}/${params.id}`).then(({ json }) => {
+      console.log(json);
+      json.id = json._id;
+      return {
+        data: json,
+      };
+    }),
 
   // getMany: (resource, params) => {
   //   const query = {
