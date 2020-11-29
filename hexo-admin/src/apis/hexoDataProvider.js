@@ -73,13 +73,18 @@ var hexoDataProvider = {
   //   }).then(({ json }) => ({ data: json }));
   // },
 
-  // create: (resource, params) =>
-  //   httpClient(`${apiUrl}/${resource}`, {
-  //     method: "POST",
-  //     body: JSON.stringify(params.data),
-  //   }).then(({ json }) => ({
-  //     data: { ...params.data, id: json.id },
-  //   })),
+  create: (resource, params) => {
+    console.log("params");
+    console.log(params);
+    return httpClient(`/${resource}/new`, {
+      method: "POST",
+      body: JSON.stringify(params.data),
+    }).then(({ json }) => {
+      return {
+        data: { ...params.data, id: json._id },
+      };
+    });
+  },
 
   // delete: (resource, params) =>
   //   httpClient(`${apiUrl}/${resource}/${params.id}`, {

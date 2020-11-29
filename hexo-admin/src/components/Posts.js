@@ -1,6 +1,7 @@
 import * as React from "react";
 import {
   BooleanField,
+  Create,
   Datagrid,
   DateField,
   Edit,
@@ -21,6 +22,14 @@ export const Posts = (props) => (
       <DateField source="date" />
     </Datagrid>
   </List>
+);
+
+export const PostCreate = (props) => (
+  <Create {...props}>
+    <SimpleForm>
+      <TextInput source="title" />
+    </SimpleForm>
+  </Create>
 );
 
 export const PostEdit = (props) => (
