@@ -86,10 +86,11 @@ var hexoDataProvider = {
     });
   },
 
-  // delete: (resource, params) =>
-  //   httpClient(`${apiUrl}/${resource}/${params.id}`, {
-  //     method: "DELETE",
-  //   }).then(({ json }) => ({ data: json })),
+  delete: (resource, params) => {
+    return httpClient(`/${resource}/${params.id}/remove`, {
+      method: "POST",
+    }).then(({ json }) => ({ data: json }));
+  },
 
   // deleteMany: (resource, params) => {
   //   const query = {
