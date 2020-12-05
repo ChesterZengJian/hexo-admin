@@ -11,6 +11,8 @@ import {
   TextInput,
 } from "react-admin";
 
+import MdEditor from "./MdEditor";
+
 export const Posts = (props) => (
   <List {...props}>
     <Datagrid rowClick="edit">
@@ -36,7 +38,7 @@ export const PostEdit = (props) => (
   <Edit {...props}>
     <SimpleForm>
       <TextField source="title" />
-      <TextInput source="_content" />
+      <MdEditor source="_content" />
     </SimpleForm>
   </Edit>
 );
