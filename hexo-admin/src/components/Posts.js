@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+  ArrayField,
   BooleanField,
   Create,
   Datagrid,
@@ -7,17 +8,23 @@ import {
   Edit,
   List,
   SimpleForm,
+  SingleFieldList,
   TextField,
   TextInput,
 } from "react-admin";
 
 import MdEditor from "./MdEditor";
+import { CategoryTag } from "./Categories";
 
 export const Posts = (props) => (
   <List {...props}>
     <Datagrid rowClick="edit">
       <TextField source="title" />
-      <TextField source="categories" />
+      <ArrayField source="categories">
+        <SingleFieldList>
+          <CategoryTag size="small" />
+        </SingleFieldList>
+      </ArrayField>
       <BooleanField source="isDraft" />
       <BooleanField source="isDiscarded" />
       <DateField source="updated" />
