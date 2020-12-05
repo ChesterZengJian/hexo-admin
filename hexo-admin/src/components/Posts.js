@@ -21,7 +21,7 @@ const PostTitle = ({ record, source }) => {
 };
 
 export const Posts = (props) => (
-  <List {...props}>
+  <List bulkActionButtons={false} {...props}>
     <Datagrid rowClick="edit">
       <TextField source="title" />
       <ArrayField source="categories">
