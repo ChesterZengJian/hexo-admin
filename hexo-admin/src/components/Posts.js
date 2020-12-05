@@ -20,9 +20,13 @@ const PostTitle = ({ record, source }) => {
   return <span>{record ? `${record[source]}` : ""}</span>;
 };
 
+const PostPanel = ({ record, source }) => {
+  return <div dangerouslySetInnerHTML={{ __html: record[source] }} />;
+};
+
 export const Posts = (props) => (
   <List bulkActionButtons={false} {...props}>
-    <Datagrid rowClick="edit">
+    <Datagrid rowClick="edit" expand={<PostPanel source="excerpt" />}>
       <TextField source="title" />
       <ArrayField source="categories">
         <SingleFieldList>
