@@ -16,6 +16,10 @@ import {
 import MdEditor from "./MdEditor";
 import { CategoryTag } from "./Categories";
 
+const PostTitle = ({ record, source }) => {
+  return <span>{record ? `${record[source]}` : ""}</span>;
+};
+
 export const Posts = (props) => (
   <List {...props}>
     <Datagrid rowClick="edit">
@@ -42,9 +46,8 @@ export const PostCreate = (props) => (
 );
 
 export const PostEdit = (props) => (
-  <Edit {...props}>
+  <Edit title={<PostTitle source="title" />} {...props}>
     <SimpleForm>
-      <TextField source="title" />
       <MdEditor source="_content" />
     </SimpleForm>
   </Edit>
