@@ -37,7 +37,7 @@ const PostPanel = (props) => {
   );
 };
 
-export const Posts = (props) => (
+export const PostList = (props) => (
   <List bulkActionButtons={false} {...props}>
     <Datagrid
       rowClick="edit"
