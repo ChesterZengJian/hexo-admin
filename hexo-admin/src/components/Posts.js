@@ -7,7 +7,10 @@ import {
   DateField,
   Edit,
   List,
+  RichTextField,
+  Show,
   SimpleForm,
+  SimpleShowLayout,
   SingleFieldList,
   TextField,
   TextInput,
@@ -20,13 +23,17 @@ const PostTitle = ({ record, source }) => {
   return <span>{record ? `${record[source]}` : ""}</span>;
 };
 
-const PostPanel = ({ record, source, emptyInfo }) => {
-  if (!record) return <div>{emptyInfo}</div>;
+const PostPanel = (props) => {
+  if (!props.record) return <div>{props.emptyinfo}</div>;
 
-  return record[source] ? (
-    <div dangerouslySetInnerHTML={{ __html: record[source] }} />
+  return props.record[props.source] ? (
+    <Show actions={null} {...props}>
+      <SimpleShowLayout>
+        <RichTextField addLabel={false} source={props.source} />
+      </SimpleShowLayout>
+    </Show>
   ) : (
-    <div>{emptyInfo}</div>
+    <div>{props.emptyinfo}</div>
   );
 };
 
@@ -34,7 +41,7 @@ export const Posts = (props) => (
   <List bulkActionButtons={false} {...props}>
     <Datagrid
       rowClick="edit"
-      expand={<PostPanel source="excerpt" emptyInfo="No excerpt!" />}
+      expand={<PostPanel source="excerpt" emptyinfo="No excerpt!" />}
     >
       <TextField source="title" />
       <ArrayField source="categories">
