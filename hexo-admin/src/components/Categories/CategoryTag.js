@@ -5,4 +5,4 @@ const CategoryTag = ({ record, size }) => {
   return <Chip label={record} size={size} />;
 };
 
-export { CategoryTag };
+export default CategoryTag;
