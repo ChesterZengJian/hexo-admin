@@ -4,8 +4,9 @@ import {
   TextField,
   ArrayField,
   SingleFieldList,
-  BooleanField,
   DateField,
+  DeleteButton,
+  EditButton,
 } from "react-admin";
 
 import PostPanel from "./PostPanel";
@@ -23,10 +24,15 @@ const PostList = (props) => (
           <CategoryTag size="small" />
         </SingleFieldList>
       </ArrayField>
-      <BooleanField source="isDraft" />
-      <BooleanField source="isDiscarded" />
-      <DateField source="updated" />
-      <DateField source="date" />
+      <ArrayField source="tags">
+        <SingleFieldList>
+          <CategoryTag size="small" />
+        </SingleFieldList>
+      </ArrayField>
+      <TextField source="author" />
+      <DateField label="Created Date" source="date" />
+      <EditButton />
+      <DeleteButton />
     </Datagrid>
   </List>
 );
