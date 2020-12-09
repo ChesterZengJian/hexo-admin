@@ -10,8 +10,6 @@ import {
   EditButton,
   CreateButton,
 } from "react-admin";
-import { connect } from "react-redux";
-import { push } from "react-router-redux";
 import { Drawer } from "@material-ui/core";
 import { Route } from "react-router";
 
@@ -24,7 +22,6 @@ const postRowClick = (id, basePath, record) => `/posts/${id}/info`;
 const handleClose = (props) => {
   console.log("handle close");
   console.log(props);
-  // props.location.pathname = "/posts";
   // props.push("/posts");
   // props.push("/posts");
 };
@@ -32,7 +29,6 @@ const handleClose = (props) => {
 const PostsListActions = ({ basePath }) => <CreateButton basePath={basePath} />;
 
 const PostList = (props) => {
-  console.log(props);
   return (
     <React.Fragment>
       <List actions={<PostsListActions />} bulkActionButtons={false} {...props}>
@@ -60,11 +56,7 @@ const PostList = (props) => {
       <Route path="/posts/create">
         {({ match }) => {
           return (
-            <Drawer
-              open={!!match}
-              anchor="right"
-              onClose={(props) => handleClose(props)}
-            >
+            <Drawer open={!!match} anchor="right" onClose={handleClose(props)}>
               <PostCreate {...props} />
             </Drawer>
           );
@@ -77,4 +69,4 @@ const PostList = (props) => {
   );
 };
 
-export default connect(undefined, { push })(PostList);
+export default PostList;
