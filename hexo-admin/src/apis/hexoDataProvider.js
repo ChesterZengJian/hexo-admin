@@ -3,15 +3,48 @@ import { fetchUtils } from "react-admin";
 
 const httpClient = fetchUtils.fetchJson;
 
+const pagingData = (pageIndex, pageSize, array) => {
+  var offset = (pageIndex - 1) * pageSize;
+  return offset + pageSize >= array.length
+    ? array.slice(offset, array.length)
+    : array.slice(offset, offset + pageSize);
+};
+
+const sortBy = (field, order, parse) => {
+  let rev = order === "ASC" ? 1 : -1;
+  return function (a, b) {
+    a = a[field];
+    b = b[field];
+    if (typeof parse !== "undefined") {
+      a = parse(a);
+      b = parse(b);
+    }
+    if (a < b) {
+      return rev * -1;
+    }
+    if (a > b) {
+      return rev * 1;
+    }
+    return 1;
+  };
+};
+
 var hexoDataProvider = {
   getList: (resource, params) => {
+    console.log("params");
+    console.log(params);
+
+    const { page, perPage } = params.pagination;
+    const { field, order } = params.sort;
     return httpClient(`/${resource}/list`).then(({ headers, json }) => {
       console.log(json);
       json.map(function (obj, index) {
         obj.id = obj._id;
       });
+      let data = pagingData(page, perPage, json);
+      data.sort(sortBy(field, order));
       return {
-        data: json,
+        data: data,
         total: json.length,
       };
     });
