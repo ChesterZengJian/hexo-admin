@@ -29,6 +29,15 @@ const sortBy = (field, order, parse) => {
   };
 };
 
+const filterBy = (array, condition) => {
+  return array.filter((obj) => {
+    for (let key in condition) {
+      if (obj[key] !== condition[key]) return false;
+    }
+    return true;
+  });
+};
+
 var hexoDataProvider = {
   getList: (resource, params) => {
     console.log("params");
@@ -36,16 +45,25 @@ var hexoDataProvider = {
 
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
+    const filter = params.filter;
     return httpClient(`/${resource}/list`).then(({ headers, json }) => {
       console.log(json);
       json.map(function (obj, index) {
         obj.id = obj._id;
       });
-      let data = pagingData(page, perPage, json);
+
+      let data = json;
+      let total = json.length;
+      if (filter) {
+        data = filterBy(data, filter);
+        total = data.length;
+      }
+
+      data = pagingData(page, perPage, data);
       data.sort(sortBy(field, order));
       return {
         data: data,
-        total: json.length,
+        total: total,
       };
     });
   },

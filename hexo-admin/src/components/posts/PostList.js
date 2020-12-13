@@ -1,4 +1,4 @@
-import React from "react";
+import React, { cloneElement } from "react";
 import {
   List,
   Datagrid,
@@ -9,6 +9,11 @@ import {
   DeleteButton,
   EditButton,
   CreateButton,
+  Filter,
+  TextInput,
+  useListContext,
+  TopToolbar,
+  sanitizeListRestProps,
 } from "react-admin";
 import { Drawer } from "@material-ui/core";
 import { Route } from "react-router";
@@ -26,12 +31,58 @@ const handleClose = (props) => {
   // props.push("/posts");
 };
 
-const PostsListActions = ({ basePath }) => <CreateButton basePath={basePath} />;
+const PostsListActions = (props) => {
+  const { className, filters, maxResults, ...rest } = props;
+  const {
+    currentSort,
+    resource,
+    displayedFilters,
+    filterValues,
+    hasCreate,
+    basePath,
+    selectedIds,
+    showFilter,
+    total,
+  } = useListContext();
+
+  return (
+    <React.Fragment>
+      <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+        {filters &&
+          cloneElement(filters, {
+            resource,
+            showFilter,
+            displayedFilters,
+            filterValues,
+            context: "button",
+          })}
+        <CreateButton basePath={basePath} />
+      </TopToolbar>
+    </React.Fragment>
+  );
+};
+
+const PostListFilter = (props) => {
+  return (
+    <Filter {...props}>
+      <TextInput label="Search Title" source="title" alwaysOn />
+    </Filter>
+  );
+};
 
 const PostList = (props) => {
   return (
     <React.Fragment>
-      <List actions={<PostsListActions />} bulkActionButtons={false} {...props}>
+      <List
+        actions={<PostsListActions />}
+        filters={<PostListFilter />}
+        filterDefaultValues={{
+          published: true,
+          isDraft: false,
+          isDiscarded: false,
+        }}
+        {...props}
+      >
         <Datagrid
           rowClick={postRowClick}
           expand={<PostPanel source="excerpt" emptyinfo="No excerpt!" />}
