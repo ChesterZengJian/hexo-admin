@@ -81,6 +81,7 @@ const PostList = (props) => {
           isDraft: false,
           isDiscarded: false,
         }}
+        sort={{ field: "date", order: "DESC"  }}
         {...props}
       >
         <Datagrid
