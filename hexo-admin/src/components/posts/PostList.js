@@ -7,7 +7,6 @@ import {
   SingleFieldList,
   DateField,
   DeleteButton,
-  EditButton,
   CreateButton,
   Filter,
   TextInput,
@@ -15,10 +14,7 @@ import {
   TopToolbar,
   sanitizeListRestProps,
 } from "react-admin";
-import { Drawer } from "@material-ui/core";
-import { Route } from "react-router";
 
-import PostCreate from "./PostCreate";
 import PostPanel from "./PostPanel";
 import CategoryTag from "../Categories/CategoryTag";
 
@@ -65,7 +61,7 @@ const PostList = (props) => {
   return (
     <React.Fragment>
       <List
-        actions={<PostsListActions />}
+        actions={<PostsListActions {...props} />}
         filters={<PostListFilter />}
         filterDefaultValues={{
           published: true,
