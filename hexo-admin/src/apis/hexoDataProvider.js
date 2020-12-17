@@ -59,8 +59,8 @@ var hexoDataProvider = {
         total = data.length;
       }
 
-      data = pagingData(page, perPage, data);
       data.sort(sortBy(field, order));
+      data = pagingData(page, perPage, data);
       return {
         data: data,
         total: total,
