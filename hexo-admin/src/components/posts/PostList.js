@@ -22,15 +22,6 @@ import PostCreate from "./PostCreate";
 import PostPanel from "./PostPanel";
 import CategoryTag from "../Categories/CategoryTag";
 
-const postRowClick = (id, basePath, record) => `/posts/${id}/info`;
-
-const handleClose = (props) => {
-  console.log("handle close");
-  console.log(props);
-  // props.push("/posts");
-  // props.push("/posts");
-};
-
 const PostsListActions = (props) => {
   const { className, filters, maxResults, ...rest } = props;
   const {
@@ -81,11 +72,11 @@ const PostList = (props) => {
           isDraft: false,
           isDiscarded: false,
         }}
-        sort={{ field: "date", order: "DESC"  }}
+        sort={{ field: "date", order: "DESC" }}
         {...props}
       >
         <Datagrid
-          rowClick={postRowClick}
+          rowClick="edit"
           expand={<PostPanel source="excerpt" emptyinfo="No excerpt!" />}
         >
           <TextField source="title" />
@@ -101,22 +92,9 @@ const PostList = (props) => {
           </ArrayField>
           <TextField source="author" />
           <DateField label="Created Date" source="date" />
-          <EditButton />
           <DeleteButton />
         </Datagrid>
       </List>
-      <Route path="/posts/create">
-        {({ match }) => {
-          return (
-            <Drawer open={!!match} anchor="right" onClose={handleClose(props)}>
-              <PostCreate {...props} />
-            </Drawer>
-          );
-        }}
-      </Route>
-      <Route path="/posts/:id/info">
-        <div>Hello</div>
-      </Route>
     </React.Fragment>
   );
 };
