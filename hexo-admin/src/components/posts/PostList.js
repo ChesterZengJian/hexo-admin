@@ -70,6 +70,7 @@ const PostList = (props) => {
         }}
         sort={{ field: "date", order: "DESC" }}
         {...props}
+        bulkActionButtons={false}
       >
         <Datagrid
           rowClick="edit"
