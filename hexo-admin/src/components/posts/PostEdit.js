@@ -1,24 +1,93 @@
-import { Edit, ListButton, SimpleForm, TopToolbar } from "react-admin";
+import React from "react";
+import {
+  Button,
+  Edit,
+  ListButton,
+  SimpleForm,
+  TextInput,
+  TopToolbar,
+  Toolbar,
+  SaveButton,
+} from "react-admin";
 import PostTitle from "./PostTitle";
 import MdEditor from "../common/MdEditor";
 import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 
-const PostEditActions = ({ basePath, data }) => (
-  <TopToolbar>
-    <ListButton basePath={basePath} label="Back" icon={<ChevronLeft />} />
-  </TopToolbar>
-);
+const PostEditBasicInfoActions = (props) => {
+  console.log(props);
+  return (
+    <Toolbar {...props}>
+      <SaveButton label="Save" redirect="show" submitOnEnter={true} />
+      <SaveButton
+        label="Cancel"
+        redirect={false}
+        submitOnEnter={false}
+        variant="text"
+      />
+    </Toolbar>
+  );
+};
 
-const PostEdit = (props) => (
-  <Edit
-    title={<PostTitle source="title" />}
-    actions={<PostEditActions />}
-    {...props}
-  >
-    <SimpleForm>
-      <MdEditor source="_content" />
-    </SimpleForm>
-  </Edit>
-);
+const PostEditActions = (props) => {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <TopToolbar>
+      <Button
+        label="Basic Info"
+        onClick={() => {
+          setOpen(true);
+        }}
+      />
+      <ListButton
+        basePath={props.basePath}
+        label="Back"
+        icon={<ChevronLeft />}
+      />
+      <Dialog
+        onClose={() => {
+          setOpen(false);
+        }}
+        aria-labelledby="simple-dialog-title"
+        open={open}
+      >
+        <DialogTitle id="simple-dialog-title">
+          Edit Basic Infomation
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To subscribe to this website, please enter your email address here.
+            We will send updates occasionally.
+          </DialogContentText>
+          <SimpleForm
+            toolbar={<PostEditBasicInfoActions {...props} />}
+            record={props.data}
+          >
+            <TextInput source="title" />
+          </SimpleForm>
+        </DialogContent>
+        <DialogActions></DialogActions>
+      </Dialog>
+    </TopToolbar>
+  );
+};
+
+const PostEdit = (props) => {
+  return (
+    <Edit
+      title={<PostTitle source="title" />}
+      actions={<PostEditActions {...props} />}
+      {...props}
+    >
+      <SimpleForm>
+        <MdEditor source="_content" />
+      </SimpleForm>
+    </Edit>
+  );
+};
 
 export default PostEdit;
