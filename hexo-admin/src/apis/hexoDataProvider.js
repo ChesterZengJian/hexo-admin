@@ -38,6 +38,14 @@ const filterBy = (array, condition) => {
   });
 };
 
+const convertFileToBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
 var hexoDataProvider = {
   getList: (resource, params) => {
     console.log("params");
@@ -152,6 +160,25 @@ var hexoDataProvider = {
   //     body: JSON.stringify(params.data),
   //   }).then(({ json }) => ({ data: json }));
   // },
+
+  upload: (params) => {
+    console.log("params:");
+    console.log(params);
+    const newPic = params;
+    const url = `/images/upload`;
+
+    return convertFileToBase64(newPic).then((res) => {
+      return httpClient(url, {
+        method: "POST",
+        body: JSON.stringify({
+          data: res,
+          filename: "f1",
+        }),
+      }).then(({ json }) => {
+        console.log(json);
+      });
+    });
+  },
 };
 
 export { hexoDataProvider };
