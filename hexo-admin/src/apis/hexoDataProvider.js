@@ -2,6 +2,7 @@
 import { fetchUtils } from "react-admin";
 
 const httpClient = fetchUtils.fetchJson;
+const baseUrl = "/admin/api";
 
 const pagingData = (pageIndex, pageSize, array) => {
   var offset = (pageIndex - 1) * pageSize;
@@ -54,30 +55,32 @@ var hexoDataProvider = {
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
     const filter = params.filter;
-    return httpClient(`/${resource}/list`).then(({ headers, json }) => {
-      console.log(json);
-      json.map(function (obj, index) {
-        obj.id = obj._id;
-      });
+    return httpClient(`${baseUrl}/${resource}/list`).then(
+      ({ headers, json }) => {
+        console.log(json);
+        json.map(function (obj, index) {
+          obj.id = obj._id;
+        });
 
-      let data = json;
-      let total = json.length;
-      if (filter) {
-        data = filterBy(data, filter);
-        total = data.length;
+        let data = json;
+        let total = json.length;
+        if (filter) {
+          data = filterBy(data, filter);
+          total = data.length;
+        }
+
+        data.sort(sortBy(field, order));
+        data = pagingData(page, perPage, data);
+        return {
+          data: data,
+          total: total,
+        };
       }
-
-      data.sort(sortBy(field, order));
-      data = pagingData(page, perPage, data);
-      return {
-        data: data,
-        total: total,
-      };
-    });
+    );
   },
 
   getOne: (resource, params) =>
-    httpClient(`/${resource}/${params.id}`).then(({ json }) => {
+    httpClient(`${baseUrl}/${resource}/${params.id}`).then(({ json }) => {
       console.log(json);
       json.id = json._id;
       return {
@@ -113,7 +116,7 @@ var hexoDataProvider = {
   // },
 
   update: (resource, params) => {
-    return httpClient(`/${resource}/${params.id}`, {
+    return httpClient(`${baseUrl}/${resource}/${params.id}`, {
       method: "POST",
       body: JSON.stringify({ _content: params.data._content }),
     }).then(({ json }) => {
@@ -135,7 +138,7 @@ var hexoDataProvider = {
   create: (resource, params) => {
     console.log("params");
     console.log(params);
-    return httpClient(`/${resource}/new`, {
+    return httpClient(`${baseUrl}/${resource}/new`, {
       method: "POST",
       body: JSON.stringify(params.data),
     }).then(({ json }) => {
@@ -146,7 +149,7 @@ var hexoDataProvider = {
   },
 
   delete: (resource, params) => {
-    return httpClient(`/${resource}/${params.id}/remove`, {
+    return httpClient(`${baseUrl}/${resource}/${params.id}/remove`, {
       method: "POST",
     }).then(({ json }) => ({ data: json }));
   },
@@ -165,17 +168,17 @@ var hexoDataProvider = {
     console.log("params:");
     console.log(params);
     const newPic = params;
-    const url = `/images/upload`;
+    const url = `${baseUrl}/images/upload`;
 
     return convertFileToBase64(newPic).then((res) => {
       return httpClient(url, {
         method: "POST",
         body: JSON.stringify({
           data: res,
-          filename: "f1",
+          filename: null,
         }),
       }).then(({ json }) => {
-        console.log(json);
+        return json;
       });
     });
   },
