@@ -13,6 +13,7 @@ import {
   useListContext,
   TopToolbar,
   sanitizeListRestProps,
+  Button,
 } from "react-admin";
 
 import PostPanel from "./PostPanel";
@@ -64,8 +65,6 @@ const PostList = (props) => {
         actions={<PostsListActions {...props} />}
         filters={<PostListFilter />}
         filterDefaultValues={{
-          published: true,
-          isDraft: false,
           isDiscarded: false,
         }}
         sort={{ field: "date", order: "DESC" }}
@@ -89,6 +88,12 @@ const PostList = (props) => {
           </ArrayField>
           <TextField source="author" />
           <DateField label="Created Date" source="date" />
+          <Button
+            label="Publish"
+            onClick={() => {
+              alert("1");
+            }}
+          />
           <DeleteButton />
         </Datagrid>
       </List>
