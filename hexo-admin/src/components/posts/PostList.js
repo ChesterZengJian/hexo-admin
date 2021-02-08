@@ -45,6 +45,7 @@ const PostsListActions = (props) => {
             context: "button",
           })}
         <CreateButton basePath={basePath} />
+
       </TopToolbar>
     </React.Fragment>
   );
@@ -90,8 +91,11 @@ const PostList = (props) => {
           <DateField label="Created Date" source="date" />
           <Button
             label="Publish"
-            onClick={() => {
-              alert("1");
+            redirect="/posts"
+            onClick={(e) => {
+              alert("3");
+              e.preventDefault();
+              e.stopPropagation();
             }}
           />
           <DeleteButton />
