@@ -49,7 +49,7 @@ const convertFileToBase64 = (file) =>
 
 var hexoDataProvider = {
   getList: (resource, params) => {
-    console.log("params");
+    console.log("getList params");
     console.log(params);
 
     const { page, perPage } = params.pagination;
@@ -57,6 +57,7 @@ var hexoDataProvider = {
     const filter = params.filter;
     return httpClient(`${baseUrl}/${resource}/list`).then(
       ({ headers, json }) => {
+        console.log("getList result");
         console.log(json);
         json.map(function (obj, index) {
           obj.id = obj._id;
@@ -81,6 +82,7 @@ var hexoDataProvider = {
 
   getOne: (resource, params) =>
     httpClient(`${baseUrl}/${resource}/${params.id}`).then(({ json }) => {
+      console.log("getOne params");
       console.log(json);
       json.id = json._id;
       return {
@@ -116,6 +118,18 @@ var hexoDataProvider = {
   // },
 
   update: (resource, params) => {
+    if (
+      params.data &&
+      params.data.published &&
+      params.data.published === true
+    ) {
+      return httpClient(`${baseUrl}/${resource}/${params.id}/publish`, {
+        method: "POST",
+      }).then(({ json }) => {
+        return { data: { id: json._id, ...json } };
+      });
+    }
+
     return httpClient(`${baseUrl}/${resource}/${params.id}`, {
       method: "POST",
       body: JSON.stringify({ _content: params.data._content }),
@@ -136,8 +150,6 @@ var hexoDataProvider = {
   // },
 
   create: (resource, params) => {
-    console.log("params");
-    console.log(params);
     return httpClient(`${baseUrl}/${resource}/new`, {
       method: "POST",
       body: JSON.stringify(params.data),
@@ -151,7 +163,11 @@ var hexoDataProvider = {
   delete: (resource, params) => {
     return httpClient(`${baseUrl}/${resource}/${params.id}/remove`, {
       method: "POST",
-    }).then(({ json }) => ({ data: json }));
+    }).then(({ json }) => {
+      return {
+        data: { id: json._id, ...params.data },
+      };
+    });
   },
 
   // deleteMany: (resource, params) => {
@@ -163,13 +179,7 @@ var hexoDataProvider = {
   //     body: JSON.stringify(params.data),
   //   }).then(({ json }) => ({ data: json }));
   // },
-  
-  publish: (resource, params) => {
-    return httpClient(`${baseUrl}/${resource}/${params.id}/publish`, {
-      method: "POST",
-    }).then(({ json }) => ({ data: json }));
-  },
-  
+
   upload: (params) => {
     console.log("params:");
     console.log(params);

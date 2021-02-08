@@ -15,6 +15,7 @@ import {
   sanitizeListRestProps,
   Button,
   useMutation,
+  useDelete,
 } from "react-admin";
 
 import PostPanel from "./PostPanel";
@@ -60,38 +61,49 @@ const PostListFilter = (props) => {
   );
 };
 
-const PublishButton = ({record,resource}) => {
-  const [publish, { loading }] = useMutation({
-    type: "publish",
+const PublishButton = ({ record, resource }) => {
+  const [publishPost, { loading, error }] = useMutation({
+    type: "update",
     resource: resource,
-    payload: { id: record.id, data: { published: true, isDraft: false } },
+    payload: {
+      id: record ? record.id : "",
+      data: { published: true },
+    },
   });
+
+  if (error) {
+    return <p>ERROR</p>;
+  }
 
   return (
     <Button
       label="Publish"
-      disabled={!record.isDraft && record.published}
+      disabled={(record && !record.isDraft && record.published) || loading}
       onClick={(e) => {
-        publish();
-        // dataProvider
-        //   .publish(props.resource, { id: props.record.id })
-        //   .then(({ data }) => {
-        //     console.log(data)
-        //     setPost(data);
-        //   })
-        //   .catch((error) => {
-        //     setError(error);
-        //   });
-
-        // hexoDataProvider
-        //   .publish(props.resource, { id: props.record.id })
-        //   .then(({ data }) => {
-        //     console.log(data)
-        //   });
+        publishPost();
         e.preventDefault();
         e.stopPropagation();
       }}
     />
+  );
+};
+
+const CustomDeleteButton = ({ record }) => {
+  const [deleteOne, { loading, error }] = useDelete("posts", record.id);
+  if (error) {
+    return <p>ERROR</p>;
+  }
+  return (
+    <button
+      disabled={loading}
+      onClick={(e) => {
+        deleteOne();
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
+      Delete
+    </button>
   );
 };
 
@@ -126,6 +138,7 @@ const PostList = (props) => {
           <TextField source="author" />
           <DateField label="Created Date" source="date" />
           <PublishButton />
+          {/* <CustomDeleteButton /> */}
           <DeleteButton />
         </Datagrid>
       </List>
