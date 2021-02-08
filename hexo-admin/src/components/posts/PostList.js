@@ -1,4 +1,4 @@
-import React, { cloneElement } from "react";
+import React, { cloneElement, useState, useEffect } from "react";
 import {
   List,
   Datagrid,
@@ -14,10 +14,12 @@ import {
   TopToolbar,
   sanitizeListRestProps,
   Button,
+  useMutation,
 } from "react-admin";
 
 import PostPanel from "./PostPanel";
 import CategoryTag from "../Categories/CategoryTag";
+import { hexoDataProvider } from "../../apis/hexoDataProvider";
 
 const PostsListActions = (props) => {
   const { className, filters, maxResults, ...rest } = props;
@@ -45,7 +47,6 @@ const PostsListActions = (props) => {
             context: "button",
           })}
         <CreateButton basePath={basePath} />
-
       </TopToolbar>
     </React.Fragment>
   );
@@ -56,6 +57,41 @@ const PostListFilter = (props) => {
     <Filter {...props}>
       <TextInput label="Search Title" source="title" alwaysOn />
     </Filter>
+  );
+};
+
+const PublishButton = ({record,resource}) => {
+  const [publish, { loading }] = useMutation({
+    type: "publish",
+    resource: resource,
+    payload: { id: record.id, data: { published: true, isDraft: false } },
+  });
+
+  return (
+    <Button
+      label="Publish"
+      disabled={!record.isDraft && record.published}
+      onClick={(e) => {
+        publish();
+        // dataProvider
+        //   .publish(props.resource, { id: props.record.id })
+        //   .then(({ data }) => {
+        //     console.log(data)
+        //     setPost(data);
+        //   })
+        //   .catch((error) => {
+        //     setError(error);
+        //   });
+
+        // hexoDataProvider
+        //   .publish(props.resource, { id: props.record.id })
+        //   .then(({ data }) => {
+        //     console.log(data)
+        //   });
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    />
   );
 };
 
@@ -89,15 +125,7 @@ const PostList = (props) => {
           </ArrayField>
           <TextField source="author" />
           <DateField label="Created Date" source="date" />
-          <Button
-            label="Publish"
-            redirect="/posts"
-            onClick={(e) => {
-              alert("3");
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-          />
+          <PublishButton />
           <DeleteButton />
         </Datagrid>
       </List>

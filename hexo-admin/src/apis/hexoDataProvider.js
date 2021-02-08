@@ -163,11 +163,13 @@ var hexoDataProvider = {
   //     body: JSON.stringify(params.data),
   //   }).then(({ json }) => ({ data: json }));
   // },
+  
   publish: (resource, params) => {
     return httpClient(`${baseUrl}/${resource}/${params.id}/publish`, {
       method: "POST",
     }).then(({ json }) => ({ data: json }));
   },
+  
   upload: (params) => {
     console.log("params:");
     console.log(params);
