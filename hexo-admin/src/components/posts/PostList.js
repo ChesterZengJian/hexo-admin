@@ -1,4 +1,4 @@
-import React, { cloneElement, useState, useEffect } from "react";
+import React, { cloneElement } from "react";
 import {
   List,
   Datagrid,
@@ -15,25 +15,19 @@ import {
   sanitizeListRestProps,
   Button,
   useMutation,
-  useDelete,
 } from "react-admin";
 
 import PostPanel from "./PostPanel";
 import CategoryTag from "../Categories/CategoryTag";
-import { hexoDataProvider } from "../../apis/hexoDataProvider";
 
 const PostsListActions = (props) => {
   const { className, filters, maxResults, ...rest } = props;
   const {
-    currentSort,
     resource,
     displayedFilters,
     filterValues,
-    hasCreate,
     basePath,
-    selectedIds,
     showFilter,
-    total,
   } = useListContext();
 
   return (
@@ -85,25 +79,6 @@ const PublishButton = ({ record, resource }) => {
         e.stopPropagation();
       }}
     />
-  );
-};
-
-const CustomDeleteButton = ({ record }) => {
-  const [deleteOne, { loading, error }] = useDelete("posts", record.id);
-  if (error) {
-    return <p>ERROR</p>;
-  }
-  return (
-    <button
-      disabled={loading}
-      onClick={(e) => {
-        deleteOne();
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
-      Delete
-    </button>
   );
 };
 
