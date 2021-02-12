@@ -61,7 +61,7 @@ const PublishButton = ({ record, resource }) => {
     resource: resource,
     payload: {
       id: record ? record.id : "",
-      data: { published: true },
+      data: { published: !record.published },
     },
   });
 
@@ -71,8 +71,8 @@ const PublishButton = ({ record, resource }) => {
 
   return (
     <Button
-      label="Publish"
-      disabled={(record && !record.isDraft && record.published) || loading}
+      label={record.published ? "Unpublish" : "Publish"}
+      disabled={loading}
       onClick={(e) => {
         publishPost();
         e.preventDefault();
@@ -80,6 +80,10 @@ const PublishButton = ({ record, resource }) => {
       }}
     />
   );
+};
+
+const DeletePostButton = (param) => {
+  return <DeleteButton {...param} disabled={!param.record.published} />;
 };
 
 const PostList = (props) => {
@@ -113,8 +117,7 @@ const PostList = (props) => {
           <TextField source="author" />
           <DateField label="Created Date" source="date" />
           <PublishButton />
-          {/* <CustomDeleteButton /> */}
-          <DeleteButton />
+          <DeletePostButton />
         </Datagrid>
       </List>
     </React.Fragment>

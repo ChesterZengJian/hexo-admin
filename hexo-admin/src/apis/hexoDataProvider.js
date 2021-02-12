@@ -120,9 +120,11 @@ var hexoDataProvider = {
   update: (resource, params) => {
     if (
       params.data &&
-      params.data.published &&
-      params.data.published === true
+      params.data.published !== undefined &&
+      params.data.published
     ) {
+      console.log("publish");
+      console.log(params.data);
       return httpClient(`${baseUrl}/${resource}/${params.id}/publish`, {
         method: "POST",
       }).then(({ json }) => {
@@ -130,6 +132,22 @@ var hexoDataProvider = {
       });
     }
 
+    if (
+      params.data &&
+      params.data.published !== undefined &&
+      !params.data.published
+    ) {
+      console.log("unpublish");
+      console.log(params.data);
+      return httpClient(`${baseUrl}/${resource}/${params.id}/unpublish`, {
+        method: "POST",
+      }).then(({ json }) => {
+        return { data: { id: json._id, ...json } };
+      });
+    }
+
+    console.log("update");
+    console.log(params.data);
     return httpClient(`${baseUrl}/${resource}/${params.id}`, {
       method: "POST",
       body: JSON.stringify({ _content: params.data._content }),
