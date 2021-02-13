@@ -61,7 +61,10 @@ const PublishButton = ({ record, resource }) => {
     resource: resource,
     payload: {
       id: record ? record.id : "",
-      data: { published: !record.published },
+      data: {
+        toPublish: true,
+        published: !record.published,
+      },
     },
   });
 
@@ -83,7 +86,7 @@ const PublishButton = ({ record, resource }) => {
 };
 
 const DeletePostButton = (param) => {
-  return <DeleteButton {...param} disabled={!param.record.published} />;
+  return <DeleteButton {...param} disabled={param.record.published} />;
 };
 
 const PostList = (props) => {

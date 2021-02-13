@@ -120,6 +120,7 @@ var hexoDataProvider = {
   update: (resource, params) => {
     if (
       params.data &&
+      params.data.toPublish &&
       params.data.published !== undefined &&
       params.data.published
     ) {
@@ -134,6 +135,7 @@ var hexoDataProvider = {
 
     if (
       params.data &&
+      params.data.toPublish &&
       params.data.published !== undefined &&
       !params.data.published
     ) {
