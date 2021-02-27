@@ -152,7 +152,13 @@ var hexoDataProvider = {
     console.log(params.data);
     return httpClient(`${baseUrl}/${resource}/${params.id}`, {
       method: "POST",
-      body: JSON.stringify({ _content: params.data._content }),
+      body: JSON.stringify({
+        title: params.data.title,
+        author:params.data.author,
+        categories:params.data.categories,
+        tags:params.data.tags,
+        _content: params.data._content,
+      }),
     }).then(({ json }) => {
       json.post.id = json.post._id;
       return { data: json.post };
