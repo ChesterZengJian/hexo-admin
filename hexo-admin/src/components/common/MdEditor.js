@@ -3,7 +3,7 @@ import { useField } from "react-final-form";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 
-import {    hexoDataProvider } from "../../apis/hexoDataProvider";
+import { hexoDataProvider } from "../../apis/hexoDataProvider";
 
 const MdEditor = ({ source }) => {
   const {
@@ -26,9 +26,20 @@ const MdEditor = ({ source }) => {
     });
   };
 
+  const extraKeys = () => {
+    return {
+      "Shift-Ctrl-`": function (cm) {
+        console.log("getSelection:" + cm.getSelection("|"));
+        var selection = cm.getSelection();
+        cm.replaceSelection("`" + selection + "`");
+      },
+    };
+  };
+
   return (
     <SimpleMDE
       onChange={onChange}
+      extraKeys={extraKeys()}
       options={{
         initialValue: value,
         uploadImage: true,
