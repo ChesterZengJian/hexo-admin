@@ -1,4 +1,5 @@
 /* eslint-disable array-callback-return */
+import { cloneWith } from "lodash";
 import { fetchUtils } from "react-admin";
 
 const httpClient = fetchUtils.fetchJson;
@@ -33,7 +34,11 @@ const sortBy = (field, order, parse) => {
 const filterBy = (array, condition) => {
   return array.filter((obj) => {
     for (let key in condition) {
-      if (obj[key] !== condition[key]) return false;
+      if (
+        obj[key] !== condition[key] &&
+        obj[key].toLowerCase().indexOf(condition[key].toLowerCase()) < 0
+      )
+        return false;
     }
     return true;
   });
@@ -154,9 +159,9 @@ var hexoDataProvider = {
       method: "POST",
       body: JSON.stringify({
         title: params.data.title,
-        author:params.data.author,
-        categories:params.data.categories,
-        tags:params.data.tags,
+        author: params.data.author,
+        categories: params.data.categories,
+        tags: params.data.tags,
         _content: params.data._content,
       }),
     }).then(({ json }) => {
