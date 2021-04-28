@@ -29,9 +29,13 @@ const MdEditor = ({ source }) => {
   const extraKeys = () => {
     return {
       "Shift-Ctrl-`": function (cm) {
-        console.log("getSelection:" + cm.getSelection("|"));
         var selection = cm.getSelection();
         cm.replaceSelection("`" + selection + "`");
+        if (!selection) {
+          var currentCursor = cm.getCursor();
+          currentCursor.ch = currentCursor.ch - 1;
+          cm.setCursor(currentCursor);
+        }
       },
     };
   };
