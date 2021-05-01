@@ -1,5 +1,4 @@
 /* eslint-disable array-callback-return */
-import { cloneWith } from "lodash";
 import { fetchUtils } from "react-admin";
 
 const httpClient = fetchUtils.fetchJson;
@@ -34,11 +33,22 @@ const sortBy = (field, order, parse) => {
 const filterBy = (array, condition) => {
   return array.filter((obj) => {
     for (let key in condition) {
-      if (
-        obj[key] !== condition[key] &&
-        obj[key].toLowerCase().indexOf(condition[key].toLowerCase()) < 0
-      )
-        return false;
+      try {
+        if (
+          typeof obj[key] === String &&
+          obj[key].toLowerCase().indexOf(condition[key].toLowerCase()) > 0
+        ) {
+          return true;
+        }
+
+        if (obj[key] !== condition[key]) {
+          return false;
+        }
+      } catch (e) {
+        console.log("Key=" + key + "; condition[key]=" + condition[key]);
+        console.log("Key=" + key + "; obj[key]=" + obj[key]);
+        console.log(typeof obj[key] === String);
+      }
     }
     return true;
   });
