@@ -41,6 +41,10 @@ const MdEditor = ({ source }) => {
     };
   };
 
+  const shortcuts={
+    "drawTable": "Cmd-Alt-T",
+  }
+
   return (
     <SimpleMDE
       onChange={onChange}
@@ -49,6 +53,7 @@ const MdEditor = ({ source }) => {
         initialValue: value,
         uploadImage: true,
         imageUploadFunction: imageUploadFunction,
+        shortcuts
       }}
     />
   );
