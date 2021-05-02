@@ -18,8 +18,9 @@ const MdEditor = ({ source }) => {
       console.log(data);
       if (data.src) {
         data.src = data.src.replace(/\\/g, "/");
-        data.src = data.src.substr(1, data.src.length - 2);
-        onSuccess(data.src);
+        data.src = data.src.substr(1, data.src.length - 1);
+        console.log("Upload image successfully:" + data.src);
+        onSuccess("/" + data.src);
       } else {
         onError(data);
       }
