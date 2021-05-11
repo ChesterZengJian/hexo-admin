@@ -5,7 +5,7 @@ import "easymde/dist/easymde.min.css";
 
 import { hexoDataProvider } from "../../apis/hexoDataProvider";
 
-const MdEditor = ({ source }) => {
+const MdEditor = ({ id,source }) => {
   const {
     input: { value, onChange },
   } = useField(source);
@@ -41,19 +41,25 @@ const MdEditor = ({ source }) => {
     };
   };
 
-  const shortcuts={
-    "drawTable": "Cmd-Alt-T",
-  }
+  const shortcuts = {
+    drawTable: "Cmd-Alt-T",
+  };
 
   return (
     <SimpleMDE
       onChange={onChange}
       extraKeys={extraKeys()}
       options={{
+        autofocus: true,
+        autosave: {
+          enabled: true,
+          uniqueId: id,
+          delay:300
+        },
         initialValue: value,
         uploadImage: true,
         imageUploadFunction: imageUploadFunction,
-        shortcuts
+        shortcuts,
       }}
     />
   );

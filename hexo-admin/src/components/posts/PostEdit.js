@@ -103,7 +103,7 @@ const PostEdit = (props) => {
       {...props}
     >
       <SimpleForm>
-        <MdEditor source="_content" />
+        <MdEditor id={props.id} source="_content" />
       </SimpleForm>
     </Edit>
   );
