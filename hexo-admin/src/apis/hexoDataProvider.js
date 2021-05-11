@@ -35,8 +35,8 @@ const filterBy = (array, condition) => {
     for (let key in condition) {
       try {
         if (
-          typeof obj[key] === String &&
-          obj[key].toLowerCase().indexOf(condition[key].toLowerCase()) > 0
+          typeof obj[key] === "string" &&
+          obj[key].toLowerCase().indexOf(condition[key].toLowerCase()) >= 0
         ) {
           return true;
         }
